@@ -1,6 +1,6 @@
 'use strict';
 const mongoose=require('mongoose');
-mongoose.connect('mongodb://localhost:27017/SmartRide');
+mongoose.connect('mongodb://mongo/SmartRide');
 
 // create instance of Schema
 var mongoSchema =   mongoose.Schema;
