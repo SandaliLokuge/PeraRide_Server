@@ -8,7 +8,7 @@ const config = require('../config/config.json');
 const mongoOp_rider=require('../models/Rider');
 const configdb = require('../config/db');
 
-exports.login = function(regNo,password,callback) {
+exports.riderLogin = function(regNo,password,callback) {
 
 		  mongoOp_rider.findOne({ rider_regNo: regNo }, (err, user) => {
 
@@ -36,3 +36,19 @@ exports.login = function(regNo,password,callback) {
 		  });
 
 }
+
+exports.adminLogin = function(req,callback) {
+
+	var token = req.headers['x-access-token'];
+	
+  if (!token) callback({'response':"No token provided.",'res':false});
+
+  jwt.verify(token, configdb.secret, function(err, decoded) {
+		if (err) callback({'response':"Failed to authenticate token.",'res':false});
+		
+		callback(decoded);
+		
+  });
+
+}
+

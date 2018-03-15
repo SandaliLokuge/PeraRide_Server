@@ -1,6 +1,5 @@
 'use strict';
-const mongoose=require('mongoose');
-mongoose.connect('mongodb://mongo/SmartRide');
+const mongoose=require('../config/dbConnect');
 
 // create instance of Schema
 var mongoSchema =   mongoose.Schema;
