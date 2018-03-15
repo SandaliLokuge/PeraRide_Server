@@ -11,8 +11,9 @@ const port 	   = process.env.PORT || 8080;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-require('./routes')(router);
 app.use('/PeraRide/v1', router);
+//routing paths
+require('./routes/index')(router);
 
 app.listen(port);
 
