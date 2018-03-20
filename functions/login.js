@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt-nodejs');
 const router 	   = express.Router();
 const config = require('../config/config.json');
 const mongoOp_rider=require('../models/Rider');
+const mongoOp_admin=require('../models/Admin');
 const configdb = require('../config/db');
 
 exports.riderLogin = function(regNo,password,callback) {
@@ -37,18 +38,31 @@ exports.riderLogin = function(regNo,password,callback) {
 
 }
 
-exports.adminLogin = function(req,callback) {
+exports.adminLogin = function(username,password,callback) {
 
-	var token = req.headers['x-access-token'];
-	
-  if (!token) callback({'response':"No token provided.",'res':false});
+	mongoOp_admin.findOne({ admin_username: username }, (err, user) => {
 
-  jwt.verify(token, configdb.secret, function(err, decoded) {
-		if (err) callback({'response':"Failed to authenticate token.",'res':false});
-		
-		callback(decoded);
-		
-  });
+		if (err) throw err;
 
+		if (!user) {
+			callback({'response':"Admin does not exist",'res':false});
+		}
+
+		bcrypt.compare(password,user.admin_password, function(err, isMatch) {
+			if (err) throw err;
+
+			if (isMatch) {
+
+				const token = jwt.sign(user.toJSON(), configdb.secret, {
+					expiresIn: 604800 // 1 week
+				});
+
+				callback({'response':"Login Success",'res':true,'jwt': token});
+			}
+			else {
+				callback({'response':"Invalid Password",'res':false});
+			}
+		});
+	});
 }
 
