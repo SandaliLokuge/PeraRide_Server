@@ -46,23 +46,25 @@ exports.adminLogin = function(username,password,callback) {
 
 		if (!user) {
 			callback({'response':"Admin does not exist",'res':false});
+		}else{
+
+			bcrypt.compare(password,user.admin_password, function(err, isMatch) {
+				if (err) throw err;
+	
+				if (isMatch) {
+	
+					const token = jwt.sign(user.toJSON(), configdb.secret, {
+						expiresIn: 604800 // 1 week
+					});
+	
+					callback({'response':"Login Success",'res':true,'jwt': token});
+				}
+				else {
+					callback({'response':"Invalid Password",'res':false});
+				}
+			});
 		}
 
-		bcrypt.compare(password,user.admin_password, function(err, isMatch) {
-			if (err) throw err;
-
-			if (isMatch) {
-
-				const token = jwt.sign(user.toJSON(), configdb.secret, {
-					expiresIn: 604800 // 1 week
-				});
-
-				callback({'response':"Login Success",'res':true,'jwt': token});
-			}
-			else {
-				callback({'response':"Invalid Password",'res':false});
-			}
-		});
 	});
 }
 
