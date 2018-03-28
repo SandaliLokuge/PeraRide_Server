@@ -5,10 +5,8 @@ module.exports = (app)=>{
 
     
     app.post('/user/register/rider',function(req,res){
-        var rider_regNo = req.body.rider_regNo;
-        var rider_password = req.body.rider_password;
         
-        register.registerRider(rider_regNo,rider_password,function (found) {
+        register.registerRider(req,function (found) {
             res.json(found);
         });
     });

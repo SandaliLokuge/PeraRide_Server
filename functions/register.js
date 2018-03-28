@@ -11,28 +11,33 @@ const mongoOp_admin=require('../models/Admin');
 
 
 
-exports.registerRider = function(regNo,password,callback) {
+exports.registerRider = function(req,callback) {
 
+	var rider_regNo = req.body.rider_regNo;
+	var rider_phoneNo = req.body.rider_phoneNo;
+	
 	var hashPassword;
 	var newRider;
-	bcrypt.hash(password, null, null, function(err, hash) {
+
+	bcrypt.hash(rider_regNo, null, null, function(err, hash) {
 		newRider = new mongoOp_rider({
-			rider_regNo:regNo,
-			rider_password:hash
+			rider_regNo:rider_regNo,
+			rider_password:hash,
+			rider_phoneNo:rider_phoneNo
 		});
 	});
 
-	mongoOp_rider.find({rider_regNo: regNo},function(err,users){
+	mongoOp_rider.find({rider_regNo: rider_regNo},function(err,users){
 
 		var len = users.length;
 
 		if(len == 0){
  			newRider.save(function (err) {
-				callback({'response':"Sucessfully Registered"});
+				callback({'response':"Sucessfully Registered", 'res': true});
 			});
 		}else{
 
-			callback({'response':"User already Registered"});
+			callback({'response':"User already Registered", 'res': false});
 
 		}
 	});
