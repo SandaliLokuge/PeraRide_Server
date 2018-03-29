@@ -1,5 +1,6 @@
 var register = require('../functions/register');
 var login = require('../functions/login');
+var fetchData = require('../functions/fetchData');
 
 module.exports = (app)=>{
 
@@ -39,4 +40,11 @@ module.exports = (app)=>{
                
     });
     
+    app.get('/users/rider',function(req,res){
+        
+        fetchData.fetchRiders(req,function (found) {            
+            res.json(found);
+       });
+               
+    });
 }
