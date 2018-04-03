@@ -29,4 +29,16 @@ module.exports = (app)=>{
         });
     });
 
+    app.post('/user/editprof', authenticate, (req, res) => {
+        if (!req.body.rider_email || !req.body.rider_firstName || !req.body.rider_lastName || !req.body.rider_phone) { // simplified: '' is a falsey
+            res.json({'response':"One or more fields are empty", 'res':false});
+        }else{
+            var body = _.pick(req.body,['rider_regNo','rider_email','rider_lastName','rider_firstName','rider_phone']);
+            editprof.editprof(body, (found) => {
+                res.json(found);
+            });
+        }
+
+    });
+
 }

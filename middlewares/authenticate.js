@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const configdb = require('../config/db');
-var {User} = require('./../models/Rider');
 
 var authenticate = (req, res, next) => {
   var token = req.header('x-auth');
