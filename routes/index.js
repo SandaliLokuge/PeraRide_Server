@@ -7,5 +7,6 @@ module.exports = function(app) {
 
   //user routes
   user(app);
-	
+  phone(app);
+
 };
