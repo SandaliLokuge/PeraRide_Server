@@ -1,4 +1,4 @@
-'use strict';
+
 const express    = require('express');
 const auth = require('basic-auth');
 const jwt = require('jsonwebtoken');
@@ -9,29 +9,41 @@ const mongoOp_rider=require('../models/Rider');
 const configdb = require('../config/db');
 
 
-exports.register = function(regNo,password,callback) {
 
-	var hashPassword;
-	var newRider;
-	bcrypt.hash(password, null, null, function(err, hash) {
-		newRider = new mongoOp_rider({
-			rider_regNo:regNo,
-			rider_password:hash
-		});
-	});
+var register = (body,callback) => {
 
-	mongoOp_rider.find({rider_regNo: regNo},function(err,users){
+		var regNo = body.rider_regNo;
+		var password = body.rider_password;
 
-		var len = users.length;
+		var newRider;
 
-		if(len == 0){
- 			newRider.save(function (err) {
-				callback({'response':"Sucessfully Registered"});
+		bcrypt.hash(password, null, null, function(err, hash) {
+			newRider = new mongoOp_rider({
+
+				rider_regNo:regNo,
+				rider_password:hash
 			});
-		}else{
 
-			callback({'response':"User already Registered"});
+		});
 
-		}
-	});
+		mongoOp_rider.find({rider_regNo: regNo},function(err,users){
+
+			var len = users.length;
+
+			if(len == 0){
+	 			newRider.save(function (err) {
+					if(err){
+						callback({'response':err});
+					}
+					callback({'response':"Sucessfully Registered"});
+				});
+			}else{
+
+				callback({'response':"User already Registered"});
+
+			}
+		});
 }
+
+
+module.exports.register = register;
