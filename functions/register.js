@@ -15,6 +15,9 @@ exports.registerRider = function(req,callback) {
 
 	var rider_regNo = req.body.rider_regNo;
 	var rider_phoneNo = req.body.rider_phoneNo;
+	var rider_name = req.body.rider_name;
+	var rider_email = req.body.rider_email;
+	
 	
 	var hashPassword;
 	var newRider;
@@ -23,7 +26,9 @@ exports.registerRider = function(req,callback) {
 		newRider = new mongoOp_rider({
 			rider_regNo:rider_regNo,
 			rider_password:hash,
-			rider_phoneNo:rider_phoneNo
+			rider_phoneNo:rider_phoneNo,
+			rider_email:rider_email,
+			rider_name:rider_name			
 		});
 	});
 
