@@ -1,13 +1,15 @@
 'use strict';
-const mongoose=require('mongoose');
-mongoose.connect('mongodb://mongo/SmartRide');
+const mongoose=require('../config/dbConnect');
 
 // create instance of Schema
 var mongoSchema =   mongoose.Schema;
 // create schema
 var userSchema  = {
     "rider_regNo" : String,
-    "rider_password" : String
+    "rider_password" : String,
+    "rider_phoneNo" : String,
+    "rider_name" : {"fName" : String, "lName" : String},
+    "rider_email" : String    
 };
 // create model if not exists.
 mongoose.Promise = global.Promise;
