@@ -6,7 +6,7 @@ const mongoOp_admin = require('../models/admin');
 //var verify = Promise.promisify(jwt.verify, {context: jwt});
 
 var UserAuthenticate = (req, res, next) => {
-  var token = req.header('x-auth');
+  var token = req.body.token;
 
   try {
     decoded = jwt.verify(token, configdb.secret);
@@ -19,7 +19,7 @@ var UserAuthenticate = (req, res, next) => {
 };
 
 var AdminAuthenticate = (req, res, next) => {
-    var token = req.header('x-auth');
+    var token = req.body.token;
     jwt.verify(token, configdb.secret,function(err, decoded){
         if(err){
             res.status(401).send();

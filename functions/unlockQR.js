@@ -21,7 +21,7 @@ var unlockQR = (body) => {
                         mongoOp_station.findOneAndUpdate(
                             {"locks.lock_id" : lockId},
                             {$set : {"locks.$.bike_id" : "null" , "locks.$.empty" : true }, $inc:{'noOfEmpty' : 1}},
-                            {upsert : true , fields : "locks.$.bike_id"}
+                            {upsert : true , fields : {"locks.$.bike_id" : 1, "station_id" : 1}}
                         ).then((doc) => {
                             mongoOp_bike.findOneAndUpdate(
                                 {"rider_regNo" : regNo},
