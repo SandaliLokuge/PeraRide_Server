@@ -1,7 +1,6 @@
 'use strict';
-const mongoose = require('mongoose');
+const mongoose=require('../config/dbConnect');
 const validator = require('validator');
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/myride');
 
 var UserSchema = new mongoose.Schema({
 	rider_regNo : {

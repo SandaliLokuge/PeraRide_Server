@@ -1,8 +1,11 @@
-var register = require('../functions/register');
+
 var login = require('../functions/login');
 var editprof = require('../functions/editprof');
+var unlockQR = require('../functions/unlockQR');
+var changePassword = require('../functions/changePassword');
 var _ = require('lodash');
-var {authenticate} = require('./../middlewares/authenticate');
+var {UserAuthenticate} = require('./../middlewares/authenticate');
+
 
 module.exports = (app)=>{
 
@@ -11,9 +14,7 @@ module.exports = (app)=>{
 
         login.login(body, (found) => {
             if(found.res){
-                var token = found.token
-                found = _.pick(found,['response','res'])
-                res.header('x-auth',token).json(found);
+                res.json(found);
             }else{
                 res.json(found);
             }
@@ -21,15 +22,7 @@ module.exports = (app)=>{
     });
 
 
-    app.post('/user/register',function(req,res){
-        var body = _.pick(req.body,['rider_regNo','rider_password']);
-
-        register.register(body, (found) => {
-            res.json(found);
-        });
-    });
-
-    app.post('/user/editprof', authenticate, (req, res) => {
+    app.post('/user/editprof', UserAuthenticate,function(req, res){
         if (!req.body.rider_email || !req.body.rider_firstName || !req.body.rider_lastName || !req.body.rider_phone) { // simplified: '' is a falsey
             res.json({'response':"One or more fields are empty", 'res':false});
         }else{
@@ -40,5 +33,28 @@ module.exports = (app)=>{
         }
 
     });
+
+    app.post('/user/unlock',UserAuthenticate,function(req,res){
+
+        var body = _.pick(req.body,['rider_regNo','lockId']);
+
+        unlockQR.unlockQR(body).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
+    app.post('/user/changePass',UserAuthenticate,function(req,res){
+
+        var body = _.pick(req.body,['currentPass','newPass','rider_regNo']);
+
+        changePassword.changePassword(body).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
 
 }

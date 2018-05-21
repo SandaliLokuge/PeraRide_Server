@@ -1,10 +1,7 @@
 'use strict';
-const express    = require('express');
-const auth = require('basic-auth');
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
-const router 	   = express.Router();
-const config = require('../config/config.json');
 const mongoOp_rider=require('../models/Rider');
 const configdb = require('../config/db');
 
@@ -41,7 +38,10 @@ var login = (body,callback) => {
 	        	callback({'response':"Invalid Password",'res':false});
 	      	}
 	    });
-	});
-}
+	})
+};
+
+
 
 module.exports.login = login;
+

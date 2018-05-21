@@ -1,12 +1,7 @@
 
-const express    = require('express');
-const auth = require('basic-auth');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
-const router 	   = express.Router();
-const config = require('../config/config.json');
-const mongoOp_rider=require('../models/Rider');
-const configdb = require('../config/db');
+const mongoOp_rider = require('../models/Rider');
+const mongoOp_bike = require('../models/bike_issued');
 
 
 
@@ -26,24 +21,38 @@ var register = (body,callback) => {
 
 		});
 
-		mongoOp_rider.find({rider_regNo: regNo},function(err,users){
+		mongoOp_bike.findOne({rider_regNo:regNo}).then((doc) => {
+		    if(doc){
+                callback({'response':"something wrong", 'res' : false});
+            }else {
+                mongoOp_rider.find({rider_regNo: regNo},function(err,users){
 
-			var len = users.length;
+                    let len = users.length;
 
-			if(len == 0){
-	 			newRider.save(function (err) {
-					if(err){
-						callback({'response':err});
-					}
-					callback({'response':"Sucessfully Registered"});
-				});
-			}else{
+                    if(len === 0){
+                        newRider.save().then(()=>{
+                            var newBike = new mongoOp_bike({
+                                rider_regNo:regNo
+                            });
+                            newBike.save(function (err) {
+                                if(err){
+                                    callback({'response':err, 'res' : false});
+                                }
+                                callback({'response':"Successfully Registered", 'res' : true});
+                            })
+                        });
+                    }else{
 
-				callback({'response':"User already Registered"});
+                        callback({'response':"User already Registered", 'res' : false});
 
-			}
-		});
-}
+                    }
+                });
+            }
+        })
+
+};
 
 
 module.exports.register = register;
+
+

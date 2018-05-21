@@ -1,4 +1,6 @@
 const user = require('./user');
+const phone = require('./phone');
+const admin = require('./admin');
 
 
 module.exports = function(app) {
@@ -8,5 +10,6 @@ module.exports = function(app) {
   //user routes
   user(app);
   phone(app);
-
+  admin(app);
+	
 };

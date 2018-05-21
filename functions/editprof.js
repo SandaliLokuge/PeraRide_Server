@@ -30,9 +30,9 @@ var editprof = (body,callback) => {
         }
     },{new : true}, function (err, doc){
         if(err){
-            callback({'response':"something Wrong", 'res':false});
+            callback({'response':"Something Wrong", 'res':false});
         }
-        callback({'response':"Update Sucessfully", 'res':true});
+        callback({'response':"Update Successfully", 'res':true});
     });
 }
 
