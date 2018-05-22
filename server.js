@@ -5,13 +5,14 @@ const app        = express();
 const bodyParser = require('body-parser');
 const router 	   = express.Router();
 const port 	   = process.env.PORT || 8080;
+var mqttClient = require('./config/mqtt');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/PeraRide/v1', router);
 //routing paths
-require('./routes/index')(router);
+require('./routes/index')(router,mqttClient);
 
 app.listen(port);
 

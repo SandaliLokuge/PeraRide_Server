@@ -3,7 +3,7 @@ var smscheck = require('../functions/smscheck');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 
-module.exports = (app)=>{
+module.exports = (app,mqttClients)=>{
 
     app.post('/sms/lock',function(req,res){
 

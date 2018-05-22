@@ -7,7 +7,7 @@ var _ = require('lodash');
 var {UserAuthenticate} = require('./../middlewares/authenticate');
 
 
-module.exports = (app)=>{
+module.exports = (app,mqttClient)=>{
 
     app.post('/user/login',function(req,res){
         var body = _.pick(req.body,['rider_regNo','rider_password']);
@@ -36,9 +36,13 @@ module.exports = (app)=>{
 
     app.post('/user/unlock',UserAuthenticate,function(req,res){
 
-        var body = _.pick(req.body,['rider_regNo','lockId']);
+        var body = _.pick(req.body,['rider_regNo','lock_id']);
 
         unlockQR.unlockQR(body).then((found) => {
+            if(found.res){
+                var topic = mqttClient.undockTopic + found.docId ;                
+                mqttClient.client.publish(topic,found.lockId)      
+            }
             res.json(found);
         }).catch((found)=>{
             res.json(found);

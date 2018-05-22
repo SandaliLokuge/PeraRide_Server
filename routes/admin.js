@@ -7,7 +7,7 @@ var register = require('../functions/register');
 var adminLogin = require('../functions/adminLogin');
 
 
-module.exports = (app)=>{
+module.exports = (app,mqttClient)=>{
 
     app.post('/user/register',AdminAuthenticate,function(req,res){
         const body = _.pick(req.body, ['rider_regNo', 'rider_password']);
