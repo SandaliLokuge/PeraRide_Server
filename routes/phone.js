@@ -13,15 +13,15 @@ module.exports = (app)=>{
         console.log(number);
 
         if(!messageBody){
-            // messageBody = "lock id is not given";
-            // const twiml = new MessagingResponse();
+            messageBody = "lock id is not given";
+            const twiml = new MessagingResponse();
 
-            // twiml.message(messageBody);
+            twiml.message(messageBody);
 
-            // res.writeHead(200, {'Content-Type': 'text/xml'});
-            res.writeHead(404, {'Content-Type': 'text/xml'});
-            // res.end(twiml.toString());
-            res.end();
+            res.writeHead(200, {'Content-Type': 'text/xml'});
+            // res.writeHead(404, {'Content-Type': 'text/xml'});
+            res.end(twiml.toString());
+            // res.end();
         }
 
         // smscheck.smscheck(number,(response) => {
@@ -52,26 +52,26 @@ module.exports = (app)=>{
         // })
 
         smscheck.smscheck(message, number).then((response) => {
-            // messageBody = "Submitted lock will be unlock soon";
-            // const twiml = new MessagingResponse();
+            messageBody = "Submitted lock will be unlock soon";
+            const twiml = new MessagingResponse();
 
-            // twiml.message(messageBody);
+            twiml.message(messageBody);
 
-            // res.writeHead(200, {'Content-Type': 'text/xml'});
-            res.writeHead(404, {'Content-Type': 'text/xml'});
-            // res.end(twiml.toString());
-            res.end();
+            res.writeHead(200, {'Content-Type': 'text/xml'});
+            // res.writeHead(404, {'Content-Type': 'text/xml'});
+            res.end(twiml.toString());
+            // res.end();
             //console.log('successfull found');
         }).catch((err) => {
-            // var errmsg = err.response;
-            // const twiml = new MessagingResponse();
+            var errmsg = err.response;
+            const twiml = new MessagingResponse();
 
-            // twiml.message(errmsg);
+            twiml.message(errmsg);
 
-            // res.writeHead(200, {'Content-Type': 'text/xml'});
-            res.writeHead(404, {'Content-Type': 'text/xml'});
-            // res.end(twiml.toString());
-            res.end();
+            res.writeHead(200, {'Content-Type': 'text/xml'});
+            // res.writeHead(404, {'Content-Type': 'text/xml'});
+            res.end(twiml.toString());
+            // res.end();
             //console.log('Not found');
         })
 
