@@ -5,12 +5,15 @@ var {AdminAuthenticate} = require('./../middlewares/authenticate');
 var adminRegister = require('../functions/adminRegister');
 var register = require('../functions/register');
 var adminLogin = require('../functions/adminLogin');
+var fetchData = require('../functions/fetchData');
+
 
 
 module.exports = (app,mqttClient)=>{
 
-    app.post('/user/register',AdminAuthenticate,function(req,res){
-        const body = _.pick(req.body, ['rider_regNo', 'rider_password']);
+    app.post('/user/register',function(req,res){
+        const body = _.pick(req.body, ['rider_regNo', 'rider_password','rider_email',
+    'rider_firstName','rider_lastName','rider_phone']);
 
         register.register(body, (found) => {
             res.json(found);
@@ -57,6 +60,14 @@ module.exports = (app,mqttClient)=>{
         }).catch((found)=>{
             res.json(found);
         });
+    });
+
+    
+    app.get('/users',function(req,res){
+        fetchData.fetchRiders(req,function (found) {             
+            res.json(found); 
+       }); 
+
     });
 
 }

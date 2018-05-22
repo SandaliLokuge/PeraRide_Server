@@ -8,7 +8,13 @@ const mongoOp_bike = require('../models/bike_issued');
 var register = (body,callback) => {
 
 		var regNo = body.rider_regNo;
-		var password = body.rider_password;
+        var password = body.rider_password;
+		var mail = body.rider_email;
+		var fName = body.rider_firstName;
+        var lName = body.rider_lastName;
+		var phone = body.rider_phone;
+        
+        
 
 		var newRider;
 
@@ -16,7 +22,11 @@ var register = (body,callback) => {
 			newRider = new mongoOp_rider({
 
 				rider_regNo:regNo,
-				rider_password:hash
+                rider_password:hash,
+                rider_email:mail,
+                rider_firstName:fName,
+                rider_lastName:lName,
+                rider_phone:phone
 			});
 
 		});
