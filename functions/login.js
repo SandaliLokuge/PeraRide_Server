@@ -3,7 +3,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
 const mongoOp_rider=require('../models/Rider');
-const mongoOp_admin=require('../models/Admin');
 const configdb = require('../config/db');
 
 var login = (body,callback) => {
