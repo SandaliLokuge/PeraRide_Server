@@ -1,59 +1,60 @@
-var register = require('../functions/register');
+
 var login = require('../functions/login');
-var fetchData = require('../functions/fetchData');
+var editprof = require('../functions/editprof');
+var unlockQR = require('../functions/unlockQR');
+var changePassword = require('../functions/changePassword');
+var _ = require('lodash');
+var {UserAuthenticate} = require('./../middlewares/authenticate');
+
 
 module.exports = (app)=>{
 
-    
-    app.post('/user/register/rider',function(req,res){
-        
-        register.registerRider(req,function (found) {
-            res.json(found);
-        });
-    });
-    
-    app.post('/user/register/admin',function(req,res){
-        var admin_username = req.body.admin_username;
-        var admin_password = req.body.admin_password;
-        
-        register.registerAdmin(admin_username,admin_password,function (found) {
-            res.json(found);
-        });
-    });
-    
-    app.post('/user/login/rider',function(req,res){
-        var rider_regNo = req.body.rider_regNo;
-        var rider_password = req.body.rider_password;
-    
-        login.riderLogin(rider_regNo,rider_password,function (found) {
-             res.json(found);
-        });
-    });
-    
-    app.post('/user/login/admin',function(req,res){
-        var admin_username = req.body.admin_username;
-        var admin_password = req.body.admin_password;
-        
-        login.adminLogin(admin_username,admin_password,function (found) {
-            res.json(found);
-       });
-               
-    });
-    
-    app.get('/users/rider',function(req,res){
-        
-        fetchData.fetchRiders(req,function (found) {            
-            res.json(found);
-       });
-               
-    });
-    app.get('/user/unlock',function(req,res){
-      var jwt_token = req.body.token;
-      var bike_id=req.body.bike_id;
+    app.post('/user/login',function(req,res){
+        var body = _.pick(req.body,['rider_regNo','rider_password']);
 
-      unlock.unlock(jwt_token,bike_id,function(found){
-        res.json(found);
-      });
+        login.login(body, (found) => {
+            if(found.res){
+                res.json(found);
+            }else{
+                res.json(found);
+            }
+        });
     });
-    
+
+
+    app.post('/user/editprof', UserAuthenticate,function(req, res){
+        if (!req.body.rider_email || !req.body.rider_firstName || !req.body.rider_lastName || !req.body.rider_phone) { // simplified: '' is a falsey
+            res.json({'response':"One or more fields are empty", 'res':false});
+        }else{
+            var body = _.pick(req.body,['rider_regNo','rider_email','rider_lastName','rider_firstName','rider_phone']);
+            editprof.editprof(body, (found) => {
+                res.json(found);
+            });
+        }
+
+    });
+
+    app.post('/user/unlock',UserAuthenticate,function(req,res){
+
+        var body = _.pick(req.body,['rider_regNo','lockId']);
+
+        unlockQR.unlockQR(body).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
+    app.post('/user/changePass',UserAuthenticate,function(req,res){
+
+        var body = _.pick(req.body,['currentPass','newPass','rider_regNo']);
+
+        changePassword.changePassword(body).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
+
 }
