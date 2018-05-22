@@ -19,7 +19,7 @@ var UserAuthenticate = (req, res, next) => {
 };
 
 var AdminAuthenticate = (req, res, next) => {
-    var token = req.body.token;
+    var token = req.header('x-auth');
     jwt.verify(token, configdb.secret,function(err, decoded){
         if(err){
             res.status(401).send();
