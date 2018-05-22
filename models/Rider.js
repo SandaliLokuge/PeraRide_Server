@@ -1,6 +1,5 @@
 'use strict';
 const mongoose=require('../config/dbConnect');
-const validator = require('validator');
 
 var UserSchema = new mongoose.Schema({
 	rider_regNo : {
