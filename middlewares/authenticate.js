@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
 const configdb = require('../config/db');
 const mongoOp_admin = require('../models/admin');
-//var Promise = require("bluebird");
 
-//var verify = Promise.promisify(jwt.verify, {context: jwt});
 
 var UserAuthenticate = (req, res, next) => {
   var token = req.body.token;
@@ -13,16 +11,16 @@ var UserAuthenticate = (req, res, next) => {
     req.body.rider_regNo = decoded.rider_regNo;
     next();
   } catch (e) {
-    res.status(401).send();
+    res.json({'response':"Token Expired", 'res':false});
   }
 
 };
 
 var AdminAuthenticate = (req, res, next) => {
-    var token = req.body.token;
+    var token = req.header('x-auth');
     jwt.verify(token, configdb.secret,function(err, decoded){
         if(err){
-            res.status(401).send();
+            res.json({'response':"Token Expired", 'res':false});
         }else{
             var admin_username = decoded.admin_username;
             mongoOp_admin.find({'admin_username' : admin_username})
@@ -30,10 +28,10 @@ var AdminAuthenticate = (req, res, next) => {
                     if(doc.length){
                         next();
                     }else{
-                        res.status(401).send();
+                        res.json({'response':"Token Expired", 'res':false});
                     }
                 }).catch((err) => {
-                res.status(401).send();
+                res.json({'response':"Token Expired", 'res':false});
             });
         }
 
