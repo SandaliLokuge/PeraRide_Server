@@ -1,19 +1,31 @@
 const mqtt = require ('mqtt');
+const lockBike = require('../functions/lockBike');
 
 var client  = mqtt.connect('mqtt://159.89.238.212',{
     port: 8883,
-    username: 'test_dock',
-    password: 'perarideadmin',
+    username: 'server',
+    password: 'perarideserver',
     clientId: 'peraride_server',
     rejectUnauthorized: false
 });
 
-
-client.subscribe("peraride");
+client.on('connect', function() { 
+    client.subscribe('PeraRide/redock/lock2');    
+});
 
 client.on('message', function(topic,payload) { // When connected
-    console.log(topic.toString()+' '+payload.toString());
-    
+        
+    var body = {
+        lock_id: topic.toString().replace('PeraRide/redock/lock',''),
+        bike_id: payload.toString()
+    }
+
+    lockBike.lockBike(body).then((res)=>{
+        console.log(res);
+        
+    }).catch((err)=>{
+        throw err;
+    })
 });
 
 module.exports = {
