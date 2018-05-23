@@ -18,5 +18,5 @@ client.on('message', function(topic,payload) { // When connected
 
 module.exports = {
     client: client,
-    undockTopic: 'PeraRide/unlock/'
+    undockTopic: 'PeraRide/unlock/dock'
   };
