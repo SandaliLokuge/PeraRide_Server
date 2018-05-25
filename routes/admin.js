@@ -11,7 +11,8 @@ var fetchData = require('../functions/fetchData');
 
 module.exports = (app,mqttClient)=>{
 
-    app.post('/user/register',function(req,res){
+    //register a bike rider
+    app.post('/user/register',AdminAuthenticate,function(req,res){
         const body = _.pick(req.body, ['rider_regNo', 'rider_password','rider_email',
     'rider_firstName','rider_lastName','rider_phone']);
 
@@ -28,6 +29,7 @@ module.exports = (app,mqttClient)=>{
         });
     });
 
+    //login for admins
     app.post('/login/admin',function(req,res){
         var body = _.pick(req.body,['admin_username','admin_password']);
 
@@ -40,6 +42,7 @@ module.exports = (app,mqttClient)=>{
         });
     });
 
+    //add new lock to a dock
     app.post('/admin/addlock',AdminAuthenticate,function(req,res){
 
         var body = _.pick(req.body,['station_id','lock_id']);
@@ -51,6 +54,7 @@ module.exports = (app,mqttClient)=>{
         });
     });
 
+    //add a bike station
     app.post('/admin/addstation',AdminAuthenticate,function(req,res){
 
         var body = _.pick(req.body,['station_id','lock_id']);
@@ -62,8 +66,8 @@ module.exports = (app,mqttClient)=>{
         });
     });
 
-    
-    app.get('/users',function(req,res){
+    //fetch all registered users
+    app.post('/users',AdminAuthenticate,function(req,res){        
         fetchData.fetchRiders(req,function (found) {             
             res.json(found); 
        }); 

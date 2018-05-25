@@ -17,11 +17,12 @@ var UserAuthenticate = (req, res, next) => {
 };
 
 var AdminAuthenticate = (req, res, next) => {
-    var token = req.header('x-auth');
+    var token = req.body.token;        
     jwt.verify(token, configdb.secret,function(err, decoded){
         if(err){
             res.status(401).send();
         }else{
+            
             var admin_username = decoded.admin_username;
             mongoOp_admin.find({'admin_username' : admin_username})
                 .then((doc) => {
