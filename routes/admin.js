@@ -67,7 +67,7 @@ module.exports = (app,mqttClient)=>{
     });
 
     //fetch all registered users
-    app.post('/users',AdminAuthenticate,function(req,res){        
+    app.get('/users',AdminAuthenticate,function(req,res){                
         fetchData.fetchRiders(req,function (found) {             
             res.json(found); 
        }); 
