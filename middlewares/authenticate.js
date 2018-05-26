@@ -17,7 +17,7 @@ var UserAuthenticate = (req, res, next) => {
 };
 
 var AdminAuthenticate = (req, res, next) => {
-    var token = req.header('x-auth');
+    var token = req.body.token;
     jwt.verify(token, configdb.secret,function(err, decoded){
         if(err){
             res.json({'response':"Token Expired", 'res':false});

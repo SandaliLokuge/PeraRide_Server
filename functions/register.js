@@ -9,6 +9,10 @@ var register = (body,callback) => {
 
 		var regNo = body.rider_regNo;
 		var password = body.rider_password;
+        var mail = body.rider_email;
+        var fName = body.rider_firstName;
+        var lName = body.rider_lastName;
+        var phone = body.rider_phone;
 
 		var newRider;
 
@@ -16,14 +20,18 @@ var register = (body,callback) => {
 			newRider = new mongoOp_rider({
 
 				rider_regNo:regNo,
-				rider_password:hash
+				rider_password:hash,
+                rider_email:mail,
+                rider_firstName:fName,
+                rider_lastName:lName,
+                rider_phone:phone
 			});
 
 		});
 
 		mongoOp_bike.findOne({rider_regNo:regNo}).then((doc) => {
 		    if(doc){
-                callback({'response':"something wrong", 'res' : false});
+                callback({'response':"User already Registered", 'res' : false});
             }else {
                 mongoOp_rider.find({rider_regNo: regNo},function(err,users){
 

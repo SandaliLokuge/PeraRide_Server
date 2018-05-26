@@ -27,9 +27,26 @@ var stationSchema = new mongoose.Schema({
 		unique : true
 	},
 
-	full : {
-		type : Boolean,
-        default : false
+    name : {
+        type : String,
+        require : true,
+    },
+
+    location : {
+        lat : {
+            type : Number,
+            require : true
+        },
+
+        lan : {
+            type : Number,
+            require : true
+        }
+    },
+
+	noOfBikes : {
+		type : Number,
+        default : 0
 	},
 
     noOfEmpty : {
