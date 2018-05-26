@@ -3,7 +3,7 @@ const mongoOp_station = require('../models/stations');
 
 
 var unlockQR = (body) => {
-    var lockId = body.lock_id;
+    var lockId = body.lockId;
     var regNo = body.rider_regNo;
 
     return new Promise((resolve, reject) => {
@@ -20,7 +20,7 @@ var unlockQR = (body) => {
                     }else{
                         mongoOp_station.findOneAndUpdate(
                             {"locks.lock_id" : lockId},
-                            {$set : {"locks.$.bike_id" : "null" , "locks.$.empty" : true }, $inc:{'noOfEmpty' : 1}},
+                            {$set : {"locks.$.bike_id" : "null" , "locks.$.empty" : true }, $inc:{'noOfEmpty' : 1, 'noOfBikes' : -1}},
                             {upsert : true , fields : {"locks.$.bike_id" : 1, "station_id" : 1}}
                         ).then((doc) => {
                             mongoOp_bike.findOneAndUpdate(

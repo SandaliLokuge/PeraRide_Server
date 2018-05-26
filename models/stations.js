@@ -38,7 +38,7 @@ var stationSchema = new mongoose.Schema({
             require : true
         },
 
-        lan : {
+        lon : {
             type : Number,
             require : true
         }

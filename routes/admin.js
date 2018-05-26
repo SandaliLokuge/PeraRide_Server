@@ -51,7 +51,7 @@ module.exports = (app)=>{
 
     app.post('/admin/addstation',AdminAuthenticate,function(req,res){
 
-        var body = _.pick(req.body,['station_id','lock_id']);
+        var body = _.pick(req.body,['station_id','lock_id','name','lat','lon']);
 
         addStation.addStation(body).then((found) => {
             res.json(found);

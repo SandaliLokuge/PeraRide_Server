@@ -12,7 +12,7 @@ var lockBike = (body) => {
         ).then(() => {
             return mongoOp_station.findOneAndUpdate(
                 {"locks.lock_id": lockId},
-                {$set: {"locks.$.bike_id": bikeId, "locks.$.empty": false}, $inc: {'noOfEmpty': -1}},
+                {$set: {"locks.$.bike_id": bikeId, "locks.$.empty": false}, $inc: {'noOfEmpty': -1, 'noOfBikes' : 1}},
             )
         }).then(() => {
             resolve({'response': "Successful", 'res': true})
