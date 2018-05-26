@@ -7,7 +7,7 @@ exports.fetchRiders = function(req,callback) {
 
 		    if (err) throw err;			
             
-            callback({'riders':result});
+            callback({'res':true, 'riders':result});
 		   
 		  });
 

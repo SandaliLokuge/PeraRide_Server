@@ -1,5 +1,6 @@
 'use strict';
-const mongoose=require('../config/dbConnect');
+let mongoose = require('mongoose');
+
 
 var UserSchema = new mongoose.Schema({
 	rider_regNo : {

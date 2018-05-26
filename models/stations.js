@@ -1,5 +1,5 @@
 'use strict';
-const mongoose=require('../config/dbConnect');
+let mongoose = require('mongoose');
 
 var lockSchema = new mongoose.Schema({
     lock_id : {
