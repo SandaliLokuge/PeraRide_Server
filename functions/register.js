@@ -33,7 +33,7 @@ var register = (body,callback) => {
 
 		mongoOp_bike.findOne({rider_regNo:regNo}).then((doc) => {
 		    if(doc){
-                callback({'response':"something wrong", 'res' : false});
+                callback({'response':"User already Registered", 'res' : false});
             }else {
                 mongoOp_rider.find({rider_regNo: regNo},function(err,users){
 

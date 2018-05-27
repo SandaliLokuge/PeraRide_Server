@@ -31,8 +31,10 @@ var login = (body,callback) => {
 						const token = jwt.sign(user.toJSON(), configdb.secret, {
 							expiresIn: 604800 // 1 week
 						});
-
-						callback({'response':"Login Success",'res':true,'token':token});
+						user.logged = true;
+						user.save().then(()=>{
+							callback({'response':"Login Success",'res':true,'token':token});
+						}).catch(()=>{callback({'response':"Something Wrong",'res':false});})
  	        }
 	      	else {
 	        	callback({'response':"Invalid Password",'res':false});
@@ -44,4 +46,3 @@ var login = (body,callback) => {
 
 
 module.exports.login = login;
-

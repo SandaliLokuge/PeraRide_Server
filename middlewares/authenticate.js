@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const configdb = require('../config/db');
 const mongoOp_admin = require('../models/admin');
+const mongoOp_rider = require('../models/Rider');
 
 
 var UserAuthenticate = (req, res, next) => {
@@ -9,9 +10,60 @@ var UserAuthenticate = (req, res, next) => {
   try {
     decoded = jwt.verify(token, configdb.secret);
     req.body.rider_regNo = decoded.rider_regNo;
-    next();
+    mongoOp_rider.findOne({'rider_regNo' : decoded.rider_regNo, 'logged' : true})
+    .then((user)=>{
+        if(user){
+            next();
+        }else {
+            res.json({'response':"User not logged in", 'res':false});
+        }
+    })
+
   } catch (e) {
-    res.json({'response':"Token Expired", 'res':false});
+     var body = jwt.decode(token);
+     if(!body){
+         res.json({'response':"problem with token", 'res':false});
+     }else{
+         mongoOp_rider.findOne({'rider_regNo' : body.rider_regNo})
+         .then((user) => {
+             user.logged = false;
+             return user.save()
+         }).then(() => {
+             res.json({'response':"Token Expired", 'res':false});
+         }).catch(()=>{res.json({'response':"problem with token", 'res':false});})
+     }
+
+  }
+
+};
+
+var UserGetInfoAuthenticate = (req, res, next) => {
+  var token = req.query.token;
+  try {
+    decoded = jwt.verify(token, configdb.secret);
+    req.body.rider_regNo = decoded.rider_regNo;
+    mongoOp_rider.findOne({'rider_regNo' : decoded.rider_regNo, 'logged' : true})
+    .then((user)=>{
+        if(user){
+            next();
+        }else {
+            res.json({'response':"User not logged in", 'res':false});
+        }
+    })
+
+  } catch (e) {
+     var body = jwt.decode(token);
+     if(!body){
+         res.json({'response':"problem with token", 'res':false});
+     }else{
+         mongoOp_rider.findOne({'rider_regNo' : body.rider_regNo})
+         .then((user) => {
+             user.logged = false;
+             return user.save()
+         }).then(() => {
+             res.json({'response':"Token Expired", 'res':false});
+         }).catch(()=>{res.json({'response':"problem with token", 'res':false});})
+     }
   }
 
 };
@@ -20,7 +72,7 @@ var AdminAuthenticate = (req, res, next) => {
     var token = req.headers.authorization;        
     jwt.verify(token, configdb.secret,function(err, decoded){
         if(err){
-            res.status(401).send();
+            res.json({'response':"Token Expired", 'res':false});
         }else{
             
             var admin_username = decoded.admin_username;
@@ -29,10 +81,10 @@ var AdminAuthenticate = (req, res, next) => {
                     if(doc.length){
                         next();
                     }else{
-                        res.status(401).send();
+                        res.json({'response':"Token Expired", 'res':false});
                     }
                 }).catch((err) => {
-                res.status(401).send();
+                res.json({'response':"Token Expired", 'res':false});
             });
         }
 
@@ -42,4 +94,4 @@ var AdminAuthenticate = (req, res, next) => {
 
 
 
-module.exports = {UserAuthenticate, AdminAuthenticate};
+module.exports = {UserAuthenticate, AdminAuthenticate,UserGetInfoAuthenticate};

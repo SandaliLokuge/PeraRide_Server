@@ -6,6 +6,8 @@ var adminRegister = require('../functions/adminRegister');
 var register = require('../functions/register');
 var adminLogin = require('../functions/adminLogin');
 var fetchData = require('../functions/fetchData');
+var removebike = require('../functions/removeBike');
+var curentbikeusers = require('../functions/currentBikeUsers');
 
 
 
@@ -57,7 +59,7 @@ module.exports = (app,mqttClient)=>{
     //add a bike station
     app.post('/admin/addstation',AdminAuthenticate,function(req,res){
 
-        var body = _.pick(req.body,['station_id','lock_id']);
+        var body = _.pick(req.body,['station_id','lock_id','name','lat','lon']);
 
         addStation.addStation(body).then((found) => {
             res.json(found);
@@ -72,6 +74,26 @@ module.exports = (app,mqttClient)=>{
             res.json(found); 
        }); 
 
+    });
+
+    app.post('/admin/removebike',AdminAuthenticate,function(req,res){
+
+        var bikeId = req.body.bike_id;
+
+        removebike.removebike(bikeId).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
+    app.post('/admin/currentusers',AdminAuthenticate,function(req,res){
+
+        curentbikeusers.bikeusers().then((found) => {
+            res.json(found);
+        }).catch((err)=>{
+            res.json(err);
+        });
     });
 
 }

@@ -44,6 +44,11 @@ var UserSchema = new mongoose.Schema({
 		type : String,
 		default : '',
 		trim : true
+	},
+
+	logged: {
+		type : Boolean,
+		default : false
 	}
 
 });
