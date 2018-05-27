@@ -16,6 +16,18 @@ var UserAuthenticate = (req, res, next) => {
 
 };
 
+var UserGetInfoAuthenticate = (req, res, next) => {
+  var token = req.query.token;
+  try {
+    decoded = jwt.verify(token, configdb.secret);
+    req.body.rider_regNo = decoded.rider_regNo;
+    next();
+  } catch (e) {
+    res.json({'response':"Token Expired", 'res':false});
+  }
+
+};
+
 var AdminAuthenticate = (req, res, next) => {
     var token = req.body.token;
     jwt.verify(token, configdb.secret,function(err, decoded){
@@ -41,4 +53,4 @@ var AdminAuthenticate = (req, res, next) => {
 
 
 
-module.exports = {UserAuthenticate, AdminAuthenticate};
+module.exports = {UserAuthenticate, AdminAuthenticate,UserGetInfoAuthenticate};
