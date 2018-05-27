@@ -4,7 +4,7 @@ var userInfo = (regNo) => {
     return new Promise((resolve, reject) => {
         mongoOp_rider.findOne(
             {'rider_regNo' : regNo},
-           'rider_email rider_phone rider_firstName rider_lastName',
+           {_id:0, rider_password:0, __v:0, logged:0}
         ).then((res) => {
            resolve(res);
        }).catch((err) => {
