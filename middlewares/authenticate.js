@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const configdb = require('../config/db');
 const mongoOp_admin = require('../models/admin');
+const mongoOp_rider = require('../models/Rider');
 
 
 var UserAuthenticate = (req, res, next) => {
@@ -9,9 +10,29 @@ var UserAuthenticate = (req, res, next) => {
   try {
     decoded = jwt.verify(token, configdb.secret);
     req.body.rider_regNo = decoded.rider_regNo;
-    next();
+    mongoOp_rider.findOne({'rider_regNo' : decoded.rider_regNo, 'logged' : true})
+    .then((user)=>{
+        if(user){
+            next();
+        }else {
+            res.json({'response':"User not logged in", 'res':false});
+        }
+    })
+
   } catch (e) {
-    res.json({'response':"Token Expired", 'res':false});
+     var body = jwt.decode(token);
+     if(!body){
+         res.json({'response':"problem with token", 'res':false});
+     }else{
+         mongoOp_rider.findOne({'rider_regNo' : body.rider_regNo})
+         .then((user) => {
+             user.logged = false;
+             return user.save()
+         }).then(() => {
+             res.json({'response':"Token Expired", 'res':false});
+         }).catch(()=>{res.json({'response':"problem with token", 'res':false});})
+     }
+
   }
 
 };
@@ -21,9 +42,28 @@ var UserGetInfoAuthenticate = (req, res, next) => {
   try {
     decoded = jwt.verify(token, configdb.secret);
     req.body.rider_regNo = decoded.rider_regNo;
-    next();
+    mongoOp_rider.findOne({'rider_regNo' : decoded.rider_regNo, 'logged' : true})
+    .then((user)=>{
+        if(user){
+            next();
+        }else {
+            res.json({'response':"User not logged in", 'res':false});
+        }
+    })
+
   } catch (e) {
-    res.json({'response':"Token Expired", 'res':false});
+     var body = jwt.decode(token);
+     if(!body){
+         res.json({'response':"problem with token", 'res':false});
+     }else{
+         mongoOp_rider.findOne({'rider_regNo' : body.rider_regNo})
+         .then((user) => {
+             user.logged = false;
+             return user.save()
+         }).then(() => {
+             res.json({'response':"Token Expired", 'res':false});
+         }).catch(()=>{res.json({'response':"problem with token", 'res':false});})
+     }
   }
 
 };

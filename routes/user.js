@@ -5,6 +5,7 @@ var unlockQR = require('../functions/unlockQR');
 var changePassword = require('../functions/changePassword');
 var fetchstations = require('../functions/fetchStations');
 var getUserInfo = require('../functions/getUserInfo');
+var logout = require('../functions/userLogOut');
 var _ = require('lodash');
 var {UserAuthenticate} = require('./../middlewares/authenticate');
 var {UserGetInfoAuthenticate} = require('./../middlewares/authenticate');
@@ -71,6 +72,15 @@ module.exports = (app)=>{
     app.get('/user/getinfo',UserGetInfoAuthenticate,function(req,res){
 
         getUserInfo.userInfo(req.body.rider_regNo).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
+    app.post('/user/logout',UserAuthenticate,function(req,res){
+
+        logout.logout(req.body.rider_regNo).then((found) => {
             res.json(found);
         }).catch((found)=>{
             res.json(found);
