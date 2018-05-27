@@ -3,6 +3,7 @@ var login = require('../functions/login');
 var editprof = require('../functions/editprof');
 var unlockQR = require('../functions/unlockQR');
 var changePassword = require('../functions/changePassword');
+var fetchstations = require('../functions/fetchStations');
 var _ = require('lodash');
 var {UserAuthenticate} = require('./../middlewares/authenticate');
 
@@ -50,6 +51,15 @@ module.exports = (app)=>{
         var body = _.pick(req.body,['currentPass','newPass','rider_regNo']);
 
         changePassword.changePassword(body).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
+    app.post('/user/fetchstations',UserAuthenticate,function(req,res){
+
+        fetchstations.fetchstations().then((found) => {
             res.json(found);
         }).catch((found)=>{
             res.json(found);
