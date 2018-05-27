@@ -5,6 +5,7 @@ var {AdminAuthenticate} = require('./../middlewares/authenticate');
 var adminRegister = require('../functions/adminRegister');
 var register = require('../functions/register');
 var adminLogin = require('../functions/adminLogin');
+var removebike = require('../functions/removeBike');
 
 
 module.exports = (app)=>{
@@ -54,6 +55,17 @@ module.exports = (app)=>{
         var body = _.pick(req.body,['station_id','lock_id','name','lat','lon']);
 
         addStation.addStation(body).then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
+        });
+    });
+
+    app.post('/admin/removebike',AdminAuthenticate,function(req,res){
+
+        var bikeId = req.body.bike_id;
+
+        removebike.removebike(bikeId).then((found) => {
             res.json(found);
         }).catch((found)=>{
             res.json(found);

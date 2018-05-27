@@ -1,5 +1,6 @@
 const mqtt = require ('mqtt');
 const lockBike = require('../functions/lockBike');
+const isnewbike = require('../functions/isNewBike');
 
 var client  = mqtt.connect('mqtt://159.89.238.212',{
     port: 8883,
@@ -19,8 +20,10 @@ client.on('message', function(topic,payload) { // When connected
         lock_id: topic.toString().replace('PeraRide/redock/lock',''),
         bike_id: payload.toString()
     }
-
-    lockBike.lockBike(body).then((res)=>{
+    isnewbike.isNewBike(body)
+    .then(() => {
+        return lockBike.lockBike(body);
+    }).then((res)=>{
         console.log(res);
 
     }).catch((err)=>{
