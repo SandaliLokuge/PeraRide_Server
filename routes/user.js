@@ -9,7 +9,7 @@ var logout = require('../functions/userLogOut');
 var getstationdata = require('../functions/getStationData');
 var _ = require('lodash');
 var {UserAuthenticate} = require('./../middlewares/authenticate');
-var {UserGetInfoAuthenticate} = require('./../middlewares/authenticate');
+
 
 
 module.exports = (app,mqttClient)=>{
@@ -45,8 +45,8 @@ module.exports = (app,mqttClient)=>{
 
         unlockQR.unlockQR(body).then((found) => {
             if(found.res){
-                var topic = mqttClient.undockTopic + found.docId ;                
-                mqttClient.client.publish(topic,found.lockId)      
+                var topic = mqttClient.undockTopic + found.docId ;
+                mqttClient.client.publish(topic,found.lockId)
             }
             res.json(found);
         }).catch((found)=>{
@@ -74,7 +74,7 @@ module.exports = (app,mqttClient)=>{
         });
     });
 
-    app.get('/user/getinfo',UserGetInfoAuthenticate,function(req,res){
+    app.post('/user/getinfo',UserAuthenticate,function(req,res){
 
         getUserInfo.userInfo(req.body.rider_regNo).then((found) => {
             res.json(found);
@@ -94,7 +94,7 @@ module.exports = (app,mqttClient)=>{
 
     app.post('/user/stationdata',UserAuthenticate,function(req,res){
         var name = (req.body.name).trim();
-        
+
         getstationdata.stationdata(name).then((found) => {
             res.json(found);
         }).catch((found)=>{
