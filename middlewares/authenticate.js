@@ -37,37 +37,6 @@ var UserAuthenticate = (req, res, next) => {
 
 };
 
-var UserGetInfoAuthenticate = (req, res, next) => {
-  var token = req.query.token;
-  try {
-    decoded = jwt.verify(token, configdb.secret);
-    req.body.rider_regNo = decoded.rider_regNo;
-    mongoOp_rider.findOne({'rider_regNo' : decoded.rider_regNo, 'logged' : true})
-    .then((user)=>{
-        if(user){
-            next();
-        }else {
-            res.json({'response':"User not logged in", 'res':false});
-        }
-    })
-
-  } catch (e) {
-     var body = jwt.decode(token);
-     if(!body){
-         res.json({'response':"problem with token", 'res':false});
-     }else{
-         mongoOp_rider.findOne({'rider_regNo' : body.rider_regNo})
-         .then((user) => {
-             user.logged = false;
-             return user.save()
-         }).then(() => {
-             res.json({'response':"Token Expired", 'res':false});
-         }).catch(()=>{res.json({'response':"problem with token", 'res':false});})
-     }
-  }
-
-};
-
 var AdminAuthenticate = (req, res, next) => {
     var token = req.body.token;
     jwt.verify(token, configdb.secret,function(err, decoded){

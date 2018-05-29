@@ -70,7 +70,7 @@ module.exports = (app)=>{
         });
     });
 
-    app.get('/user/getinfo',UserGetInfoAuthenticate,function(req,res){
+    app.post('/user/getinfo',UserAuthenticate,function(req,res){
 
         getUserInfo.userInfo(req.body.rider_regNo).then((found) => {
             res.json(found);
@@ -90,7 +90,7 @@ module.exports = (app)=>{
 
     app.post('/user/stationdata',UserAuthenticate,function(req,res){
         var name = (req.body.name).trim();
-        
+
         getstationdata.stationdata(name).then((found) => {
             res.json(found);
         }).catch((found)=>{
