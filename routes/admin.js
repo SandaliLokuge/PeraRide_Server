@@ -8,6 +8,7 @@ var adminLogin = require('../functions/adminLogin');
 var fetchData = require('../functions/fetchData');
 var removebike = require('../functions/removeBike');
 var curentbikeusers = require('../functions/currentBikeUsers');
+var removeUser = require('../functions/removeUser');
 
 
 
@@ -16,7 +17,7 @@ module.exports = (app, mqttClient) => {
     //register a bike rider
     app.post('/user/register', AdminAuthenticate, function (req, res) {
         const body = _.pick(req.body, ['rider_regNo', 'rider_password', 'rider_email',
-            'rider_firstName', 'rider_lastName', 'rider_phone']);
+            'rider_firstName','rider_lastName','rider_phone','nic']);
 
         register.register(body, (found) => {
             res.json(found);
@@ -90,6 +91,15 @@ module.exports = (app, mqttClient) => {
     app.post('/admin/currentusers', AdminAuthenticate, function (req, res) {
 
         curentbikeusers.bikeusers().then((found) => {
+            res.json(found);
+        }).catch((err) => {
+            res.json(err);
+        });
+    });
+
+    app.post('/admin/removeuser', AdminAuthenticate, function (req, res) {
+
+        removeUser.removeUser(req.body.rider_regNo).then((found) => {
             res.json(found);
         }).catch((err) => {
             res.json(err);

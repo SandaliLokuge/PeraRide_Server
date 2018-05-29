@@ -12,9 +12,8 @@ var register = (body,callback) => {
 		var mail = body.rider_email;
 		var fName = body.rider_firstName;
         var lName = body.rider_lastName;
-		var phone = body.rider_phone;
-        
-        
+        var phone = body.rider_phone;
+		var nic = body.nic;
 
 		var newRider;
 
@@ -26,7 +25,8 @@ var register = (body,callback) => {
                 rider_email:mail,
                 rider_firstName:fName,
                 rider_lastName:lName,
-                rider_phone:phone
+                rider_phone:phone,
+				nic : nic
 			});
 
 		});
@@ -64,5 +64,3 @@ var register = (body,callback) => {
 
 
 module.exports.register = register;
-
-

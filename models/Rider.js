@@ -49,6 +49,12 @@ var UserSchema = new mongoose.Schema({
 	logged: {
 		type : Boolean,
 		default : false
+	},
+
+	nic: {
+		type : String,
+		default : '',
+		trim : true
 	}
 
 });
