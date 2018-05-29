@@ -13,7 +13,7 @@ module.exports = (app)=>{
 
     app.post('/user/register',AdminAuthenticate,function(req,res){
         const body = _.pick(req.body, ['rider_regNo', 'rider_password', 'rider_email',
-            'rider_firstName','rider_lastName','rider_phone']);
+            'rider_firstName','rider_lastName','rider_phone','nic']);
 
         register.register(body, (found) => {
             res.json(found);
