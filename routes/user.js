@@ -9,7 +9,7 @@ var logout = require('../functions/userLogOut');
 var getstationdata = require('../functions/getStationData');
 var _ = require('lodash');
 var {UserAuthenticate} = require('./../middlewares/authenticate');
-var {UserGetInfoAuthenticate} = require('./../middlewares/authenticate');
+
 
 
 module.exports = (app)=>{

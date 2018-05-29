@@ -62,4 +62,4 @@ var AdminAuthenticate = (req, res, next) => {
 
 
 
-module.exports = {UserAuthenticate, AdminAuthenticate,UserGetInfoAuthenticate};
+module.exports = {UserAuthenticate, AdminAuthenticate};
