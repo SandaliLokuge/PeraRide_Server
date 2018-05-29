@@ -6,7 +6,7 @@ var fetchstations = () => {
             {},
             {_id:0, station_id:0, __v:0, noOfEmpty:0, noOfBikes:0, locks:0}
         ).then((res) => {
-           resolve(res);
+           resolve({'response' : res});
        }).catch((err) => {
            reject(err);
        })
