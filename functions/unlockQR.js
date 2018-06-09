@@ -5,7 +5,7 @@ const mongoOp_station = require('../models/stations');
 var unlockQR = (body) => {
     var lockId = body.lockId;
     var regNo = body.rider_regNo;
-
+    console.log(lockId + "   " + regNo);
     return new Promise((resolve, reject) => {
         mongoOp_bike.findOne(
             {"rider_regNo" : regNo}

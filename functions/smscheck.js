@@ -5,7 +5,7 @@ var unlockQR = require('./unlockQR');
 
 var smscheck = (message,phone) => {
     var phoneNo = phone;
-    
+
     return new Promise((resolve, reject) => {
         mongoOp_rider.findOne({rider_phone: phoneNo})
             .then((user) => {
@@ -13,8 +13,8 @@ var smscheck = (message,phone) => {
                 if (!user){
                     reject({'response':"User not exist",'res':false});
                 }
-                var body = {'rider_regNo': user.rider_regNo, 'lock_id': message };
-
+                var body = {'rider_regNo': user.rider_regNo, 'lockId': message };
+                
                 unlockQR.unlockQR(body).then((response) => {
                     resolve(response);
                 }).catch((err) => {
