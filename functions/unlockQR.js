@@ -16,7 +16,7 @@ var unlockQR = (body) => {
                 if(!doc.bike_id){
                     mongoOp_station.findOne(
                         {"locks.lock_id" : lockId},
-                        {"locks.$.bike_id" : true}
+                        {"locks.$.empty" : false}
                     ).then((doc) => {
                         if(doc.locks[0].empty){
                             reject({'response' : "unsuccess lock is already empty", 'res' : false});
