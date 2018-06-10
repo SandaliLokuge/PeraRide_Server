@@ -3,7 +3,7 @@ const mongoOp_station = require('../models/stations');
 
 
 var unlockQR = (body) => {
-    var lockId = body.lockId;
+    var lockId = body.lock_id;
     var regNo = body.rider_regNo;
 
    var docID;
