@@ -26,13 +26,14 @@ var unlockQR = (body) => {
                                 {$set : {"locks.$.bike_id" : null , "locks.$.empty" : true }, $inc:{'noOfEmpty' : 1, 'noOfBikes' : -1}},
                                 {upsert : true , fields : {"locks.$.bike_id" : 1, "station_id" : 1}}
                             ).then((doc) => {
+                                docID = doc.station_id;
                                 mongoOp_bike.findOneAndUpdate(
                                     {"rider_regNo" : regNo},
                                     {$set : {"bike_id" : doc.locks[0].bike_id }, $currentDate : {"date_time" : true}},
                                     {new : true}
                                 ).then((ele)=>{
                                     if(ele){
-                                        resolve({'response' : "success", 'res' : true});
+                                        resolve({'response' : "success", 'res' : true, 'docId' : docID, 'lockId' : lockId});
                                     }else {
                                         reject({'response' : "unsuccess not found rider", 'res' : false});
                                     }
