@@ -102,7 +102,8 @@ describe('Admin', () => {
         rider_email: 'emailaddress',
         rider_firstName: 'firstName',
         rider_lastName: 'lastName',
-        rider_phone: '0123456789'
+        rider_phone: '0123456789',
+        nic: '12345678v'
     }
 
     describe('/POST user register /GET users', () => {
@@ -157,7 +158,8 @@ describe('Admin', () => {
                                                         rider_firstName: 'firstName',
                                                         rider_lastName: 'lastName',
                                                         logged: false,
-                                                        rider_regNo: 'user'
+                                                        rider_regNo: 'user',
+                                                        nic: '12345678v'                                                        
                                                     }])
                                                     done()
                                                 })
