@@ -80,7 +80,7 @@ describe('Admin', () => {
                 });
         });
 
-        it('login using unregistered admin shoul be failed', (done) => {
+        it('login using unregistered admin should be failed', (done) => {
             chai.request(server)
                 .post('/PeraRide/v1/login/admin')
                 .set('content-type', 'application/x-www-form-urlencoded')

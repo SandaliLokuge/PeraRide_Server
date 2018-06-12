@@ -101,19 +101,131 @@ describe('User', () => {
                 });
         });
 
-        // it('login using unregistered admin shoul be failed', (done) => {
-        //     chai.request(server)
-        //         .post('/PeraRide/v1/login/admin')
-        //         .set('content-type', 'application/x-www-form-urlencoded')
-        //         .send(admin)
-        //         .end((err, res) => {
-        //             res.should.have.status(200);
-        //             res.body.should.be.a('object');
-        //             res.body.should.have.property('response').eql('Admin does not exist')
-        //             res.body.should.have.property('res').to.be.false
+        it('login using unregistered admin should be failed', (done) => {
+            chai.request(server)
+                .post('/PeraRide/v1/user/login')
+                .set('content-type', 'application/x-www-form-urlencoded')
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('response').eql('User not exist')
+                    res.body.should.have.property('res').to.be.false
 
-        //             done();
-        //         });
-        // });
+                    done();
+                });
+        });
+
+    });
+
+    describe('/POST change password', () => {
+
+        it('change user password with correct old password should be success', (done) => {
+            chai.request(server)
+                .post('/PeraRide/v1/register/admin')
+                .set('content-type', 'application/x-www-form-urlencoded')
+                .send(admin)
+                .end((err, res) => {
+
+                    chai.request(server)
+                        .post('/PeraRide/v1/login/admin')
+                        .set('content-type', 'application/x-www-form-urlencoded')
+                        .send(admin)
+                        .end((err, res) => {
+
+                            let token = res.body.token;
+
+                            chai.request(server)
+                                .post('/PeraRide/v1/user/register')
+                                .set('content-type', 'application/x-www-form-urlencoded')
+                                .set('Authorization', token)
+                                .send(user)
+                                .end((err, res) => {
+                                    chai.request(server)
+                                        .post('/PeraRide/v1/user/login')
+                                        .set('content-type', 'application/x-www-form-urlencoded')
+                                        .send(user)
+                                        .end((err, res) => {
+
+                                            let userToken = res.body.token;
+
+                                            let details = {
+                                                token: userToken,
+                                                regNo: user.rider_regNo,
+                                                currentPass: user.rider_password,
+                                                newPass: 'newPassword'
+                                            }
+
+                                            chai.request(server)
+                                                .post('/PeraRide/v1/user/changePass')
+                                                .set('content-type', 'application/x-www-form-urlencoded')
+                                                .send(details)
+                                                .end((err, res) => {
+                                                    res.should.have.status(200);
+                                                    res.body.should.have.property('res').to.be.true
+                                                    res.body.should.have.property('response').eql('Password change')
+
+                                                    done()
+                                                })
+
+                                        })
+                                })
+                        });
+                });
+        });
+
+        it('change user password with incorrect old password should be failed', (done) => {
+            chai.request(server)
+                .post('/PeraRide/v1/register/admin')
+                .set('content-type', 'application/x-www-form-urlencoded')
+                .send(admin)
+                .end((err, res) => {
+
+                    chai.request(server)
+                        .post('/PeraRide/v1/login/admin')
+                        .set('content-type', 'application/x-www-form-urlencoded')
+                        .send(admin)
+                        .end((err, res) => {
+
+                            let token = res.body.token;
+
+                            chai.request(server)
+                                .post('/PeraRide/v1/user/register')
+                                .set('content-type', 'application/x-www-form-urlencoded')
+                                .set('Authorization', token)
+                                .send(user)
+                                .end((err, res) => {
+                                    chai.request(server)
+                                        .post('/PeraRide/v1/user/login')
+                                        .set('content-type', 'application/x-www-form-urlencoded')
+                                        .send(user)
+                                        .end((err, res) => {
+
+                                            let userToken = res.body.token;
+
+                                            let details = {
+                                                token: userToken,
+                                                regNo: user.rider_regNo,
+                                                currentPass: 'wrongPassword',
+                                                newPass: 'newPassword'
+                                            }
+
+                                            chai.request(server)
+                                                .post('/PeraRide/v1/user/changePass')
+                                                .set('content-type', 'application/x-www-form-urlencoded')
+                                                .send(details)
+                                                .end((err, res) => {
+                                                    res.should.have.status(200);
+                                                    res.body.should.have.property('res').to.be.false
+                                                    res.body.should.have.property('response').eql('Invalid Password')
+
+                                                    done()
+                                                })
+
+                                        })
+                                })
+                        });
+                });
+        });
     });
 });

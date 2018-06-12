@@ -26,10 +26,8 @@ var addStation = (body) => {
 
         station.save(function (err) {
             if (!err) {
-                console.log('Success!');
                 resolve({'response' : "Successful", 'res' : true});
             } else {
-                console.log(err);
                 reject({'response' : "Unsuccessful", 'res' : false});
             }
         });
