@@ -10,6 +10,7 @@ var removebike = require('../functions/removeBike');
 var curentbikeusers = require('../functions/currentBikeUsers');
 var removeUser = require('../functions/removeUser');
 var fetchstations = require('../functions/fetchStations');
+var curentbikes = require('../functions/curentBikes');
 
 
 
@@ -94,6 +95,15 @@ module.exports = (app, mqttClient) => {
         curentbikeusers.bikeusers().then((found) => {
             res.json({currentusers: found});
         }).catch((err) => {
+            res.json(err);
+        });
+    });
+
+    app.post('/admin/currentbikes',function(req,res){
+
+        curentbikes.bikes().then((found) => {
+            res.json(found);
+        }).catch((err)=>{
             res.json(err);
         });
     });

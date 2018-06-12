@@ -1,9 +1,9 @@
 var _ = require('lodash');
-var smscheck = require('../functions/smscheck');
+var smsHandling = require('../functions/smsHandling');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 
-module.exports = (app,mqttClients)=>{
+module.exports = (app,mqttClient)=>{
 
     app.post('/sms/lock',function(req,res){
 
@@ -13,39 +13,58 @@ module.exports = (app,mqttClients)=>{
 
 
         if(!message){
-            messageBody = "lock id is not given";
+            messageBody = "Invalid Format";
             const twiml = new MessagingResponse();
 
             twiml.message(messageBody);
 
             res.writeHead(200, {'Content-Type': 'text/xml'});
-            // res.writeHead(404, {'Content-Type': 'text/xml'});
+
             res.end(twiml.toString());
-            // res.end();
+
         }
 
-        smscheck.smscheck(message, number).then((response) => {
-            messageBody = "Submitted lock will be unlock soon";
-            const twiml = new MessagingResponse();
+        smsHandling.smsHandling(message, number).then((found) => {
+            if(found.res){
+                console.log(found);
+                var topic = mqttClient.undockTopic + found.docId ;
+                mqttClient.client.publish(topic,found.lockId);
 
-            twiml.message(messageBody);
+                messageBody = "Submitted lock will be unlock soon";
+                const twiml = new MessagingResponse();
 
-            res.writeHead(200, {'Content-Type': 'text/xml'});
-            // res.writeHead(404, {'Content-Type': 'text/xml'});
-            res.end(twiml.toString());
-            // res.end();
-            console.log('successfull found');
+                twiml.message(messageBody);
+
+                res.writeHead(200, {'Content-Type': 'text/xml'});
+
+                res.end(twiml.toString());
+
+                console.log('successfull found unlock');
+            }else {
+
+                const twiml = new MessagingResponse();
+
+                twiml.message(found.response);
+
+                res.writeHead(200, {'Content-Type': 'text/xml'});
+
+                res.end(twiml.toString());
+
+                console.log('successfull found station information');
+            }
+
+
         }).catch((err) => {
-            var errmsg = err.response;
+            console.log(err);
+            var errmsg = err.response.response;
             const twiml = new MessagingResponse();
-
+            console.log(errmsg);
             twiml.message(errmsg);
 
             res.writeHead(200, {'Content-Type': 'text/xml'});
-            // res.writeHead(404, {'Content-Type': 'text/xml'});
+
             res.end(twiml.toString());
-            // res.end();
-            console.log('Not found');
+
         })
 
     });
