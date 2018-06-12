@@ -1,87 +1,70 @@
 var _ = require('lodash');
-var smscheck = require('../functions/smscheck');
-var smsfetchstation = require('../functions/smsFetchStation');
+var smsHandling = require('../functions/smsHandling');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 
-module.exports = (app)=>{
+module.exports = (app,mqttClient)=>{
 
     app.post('/sms/lock',function(req,res){
 
         var messageBody="";
         var message=(req.body.Body).trim();
         var number = req.body.From;
-        console.log(number);
-
-        // if(!messageBody){
-        //     // messageBody = "lock id is not given";
-        //     // const twiml = new MessagingResponse();
-        //
-        //     // twiml.message(messageBody);
-        //
-        //     // res.writeHead(200, {'Content-Type': 'text/xml'});
-        //     res.writeHead(404, {'Content-Type': 'text/xml'});
-        //     // res.end(twiml.toString());
-        //     res.end();
-        // }
-
-        // smscheck.smscheck(message, number).then((response) => {
-        //     // messageBody = "Submitted lock will be unlock soon";
-        //     // const twiml = new MessagingResponse();
-        //
-        //     // twiml.message(messageBody);
-        //
-        //     // res.writeHead(200, {'Content-Type': 'text/xml'});
-        //     res.writeHead(404, {'Content-Type': 'text/xml'});
-        //     // res.end(twiml.toString());
-        //     res.end();
-        //     //console.log('successfull found');
-        // }).catch((err) => {
-        //     // var errmsg = err.response;
-        //     // const twiml = new MessagingResponse();
-        //
-        //     // twiml.message(errmsg);
-        //
-        //     // res.writeHead(200, {'Content-Type': 'text/xml'});
-        //     res.writeHead(404, {'Content-Type': 'text/xml'});
-        //     // res.end(twiml.toString());
-        //     res.end();
-        //     //console.log('Not found');
-        // })
 
 
+        if(!message){
+            messageBody = "Invalid Format";
+            const twiml = new MessagingResponse();
 
-        smsfetchstation.smsfetchstation()
-        .then((response) => {
-            var msg = "";
-            if(response.length == 0){
-                msg = "no station found";
-            }else {
-                for (var i = 0; i < response.length; i++) {
-                    var str = i.toString() + ". " + (response[i].name).toString() + " --->  empty locks : " + (response[i].noOfEmpty).toString()+",  bikes : "  +(response[i].noOfBikes).toString() + "\n";
-                    msg = msg.concat(str);
-                }
-            }
+            twiml.message(messageBody);
+
+            res.writeHead(200, {'Content-Type': 'text/xml'});
+
+            res.end(twiml.toString());
+
+        }
+
+        smsHandling.smsHandling(message, number).then((found) => {
+            if(found.res){
+                var topic = mqttClient.undockTopic + found.docId ;
+                mqttClient.client.publish(topic,found.lockId)
+
+                messageBody = "Submitted lock will be unlock soon";
                 const twiml = new MessagingResponse();
 
-                twiml.message(msg);
+                twiml.message(messageBody);
 
                 res.writeHead(200, {'Content-Type': 'text/xml'});
-                // res.writeHead(404, {'Content-Type': 'text/xml'});
+
                 res.end(twiml.toString());
-                // res.end();
-                //console.log('successfull found');
+
+                console.log('successfull found unlock');
+            }else {
+
+                const twiml = new MessagingResponse();
+
+                twiml.message(found.response);
+
+                res.writeHead(200, {'Content-Type': 'text/xml'});
+
+                res.end(twiml.toString());
+
+                console.log('successfull found station information');
+            }
+
+
         }).catch((err) => {
-            var errmsg = "error";
+            //console.log(err);
+            var errmsg = err.response.response;
             const twiml = new MessagingResponse();
 
             twiml.message(errmsg);
-
+            console.log(errmsg);
             res.writeHead(200, {'Content-Type': 'text/xml'});
-            // res.writeHead(404, {'Content-Type': 'text/xml'});
+
             res.end(twiml.toString());
-            // res.end();
-            //console.log('Not found');
+
+            console.log('Not found');
         })
 
     });

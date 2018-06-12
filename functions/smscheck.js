@@ -12,14 +12,16 @@ var smscheck = (message,phone) => {
 
                 if (!user){
                     reject({'response':"User not exist",'res':false});
+                }else {
+
+                    var body = {'rider_regNo': user.rider_regNo, 'lockId': message };
+
+                    unlockQR.unlockQR(body).then((response) => {
+                        resolve(response);
+                    }).catch((err) => {
+                        reject(err);
+                    });
                 }
-                var body = {'rider_regNo': user.rider_regNo, 'lockId': message };
-                
-                unlockQR.unlockQR(body).then((response) => {
-                    resolve(response);
-                }).catch((err) => {
-                    reject(err);
-                });
             }).catch(() => {
                 reject({'response':"Something Wrong",'res':false});
             });

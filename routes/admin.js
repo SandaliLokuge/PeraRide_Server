@@ -8,6 +8,7 @@ var adminLogin = require('../functions/adminLogin');
 var removebike = require('../functions/removeBike');
 var curentbikeusers = require('../functions/currentBikeUsers');
 var removeUser = require('../functions/removeUser');
+var curentbikes = require('../functions/curentBikes');
 
 
 module.exports = (app)=>{
@@ -77,6 +78,15 @@ module.exports = (app)=>{
     app.post('/admin/currentusers',AdminAuthenticate,function(req,res){
 
         curentbikeusers.bikeusers().then((found) => {
+            res.json(found);
+        }).catch((err)=>{
+            res.json(err);
+        });
+    });
+
+    app.post('/admin/currentbikes',function(req,res){
+
+        curentbikes.bikes().then((found) => {
             res.json(found);
         }).catch((err)=>{
             res.json(err);
