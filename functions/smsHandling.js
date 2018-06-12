@@ -6,8 +6,8 @@ var smsHandling = (messagebody, number) => {
     return new Promise((resolve, reject) => {
         result = messagebody.split("-",2);
         console.log(result);
-        if(result[0].toString() == "PERA"){
-            if(result[1].toString() == "DI"){
+        if(result[0].toString().trim() == "PERA"){
+            if(result[1].toString().trim() == "DI"){
                 smsfetchstation.smsfetchstation()
                 .then((response) => {
                     var msg = "";
@@ -28,7 +28,7 @@ var smsHandling = (messagebody, number) => {
 
             }
         }else{
-            reject({'response' : "invalid format" , 'res' : false});
+            reject({'response' : {'response' : "invalid format" , 'res' : false}});
         }
     })
 

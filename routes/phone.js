@@ -26,8 +26,9 @@ module.exports = (app,mqttClient)=>{
 
         smsHandling.smsHandling(message, number).then((found) => {
             if(found.res){
+                console.log(found);
                 var topic = mqttClient.undockTopic + found.docId ;
-                mqttClient.client.publish(topic,found.lockId)
+                mqttClient.client.publish(topic,found.lockId);
 
                 messageBody = "Submitted lock will be unlock soon";
                 const twiml = new MessagingResponse();
@@ -54,17 +55,16 @@ module.exports = (app,mqttClient)=>{
 
 
         }).catch((err) => {
-            //console.log(err);
+            console.log(err);
             var errmsg = err.response.response;
             const twiml = new MessagingResponse();
-
-            twiml.message(errmsg);
             console.log(errmsg);
+            twiml.message(errmsg);
+
             res.writeHead(200, {'Content-Type': 'text/xml'});
 
             res.end(twiml.toString());
 
-            console.log('Not found');
         })
 
     });
