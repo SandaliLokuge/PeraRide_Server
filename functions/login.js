@@ -17,29 +17,31 @@ var login = (body,callback) => {
 			}
 
 	    if (!user) {
-	      callback({'response':"User not exist",'res':false});
-	    }
+	      	callback({'response':"User not exist",'res':false});
+	  	}else{
 
-	    bcrypt.compare(password,user.rider_password, function(err, isMatch) {
-	      	if (err){
-						//throw err;
-						callback({'response':"Something Wrong",'res':false});
-					}
+			  bcrypt.compare(password,user.rider_password, function(err, isMatch) {
+				  if (err){
+					  //throw err;
+					  callback({'response':"Something Wrong",'res':false});
+				  }
 
-	      	if (isMatch) {
+				  if (isMatch) {
 
-						const token = jwt.sign(user.toJSON(), configdb.secret, {
-							expiresIn: 604800 // 1 week
-						});
-						user.logged = true;
-						user.save().then(()=>{
-							callback({'response':"Login Success",'res':true,'token':token});
-						}).catch(()=>{callback({'response':"Something Wrong",'res':false});})
- 	        }
-	      	else {
-	        	callback({'response':"Invalid Password",'res':false});
-	      	}
-	    });
+					  const token = jwt.sign(user.toJSON(), configdb.secret, {
+						  expiresIn: 604800 // 1 week
+					  });
+					  user.logged = true;
+					  user.save().then(()=>{
+						  callback({'response':"Login Success",'res':true,'token':token});
+					  }).catch(()=>{callback({'response':"Something Wrong",'res':false});})
+				  }
+				  else {
+					  callback({'response':"Invalid Password",'res':false});
+				  }
+			  });
+	  }
+
 	})
 };
 
