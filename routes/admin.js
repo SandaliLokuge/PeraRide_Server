@@ -9,6 +9,7 @@ var fetchData = require('../functions/fetchData');
 var removebike = require('../functions/removeBike');
 var curentbikeusers = require('../functions/currentBikeUsers');
 var removeUser = require('../functions/removeUser');
+var fetchstations = require('../functions/fetchStations');
 
 
 
@@ -88,10 +89,10 @@ module.exports = (app, mqttClient) => {
         });
     });
 
-    app.post('/admin/currentusers', AdminAuthenticate, function (req, res) {
+    app.get('/admin/currentusers', AdminAuthenticate, function (req, res) {
 
         curentbikeusers.bikeusers().then((found) => {
-            res.json(found);
+            res.json({currentusers: found});
         }).catch((err) => {
             res.json(err);
         });
@@ -103,6 +104,15 @@ module.exports = (app, mqttClient) => {
             res.json(found);
         }).catch((err) => {
             res.json(err);
+        });
+    });
+
+    app.get('/admin/fetchstations',AdminAuthenticate,function(req,res){
+
+        fetchstations.fetchstations().then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
         });
     });
 
