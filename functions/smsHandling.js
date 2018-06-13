@@ -12,7 +12,7 @@ var smsHandling = (messagebody, number) => {
                 .then((response) => {
                     var msg = "";
                     for (var i = 0; i < response.length; i++) {
-                        var str = (response[i].name).toString() + " station has " + (response[i].noOfEmpty).toString() + " empty locks and " +(response[i].noOfBikes).toString() + " bikes\n";
+                        var str = (response[i].name).toString() + " station : empty locks - " + (response[i].noOfEmpty).toString() + ", bikes - " +(response[i].noOfBikes).toString() + "\n";
                         msg = msg.concat(str);
                     }
                     resolve({'response' : msg , 'res' : false});
