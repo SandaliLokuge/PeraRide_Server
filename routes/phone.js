@@ -27,8 +27,8 @@ module.exports = (app,mqttClient)=>{
         smsHandling.smsHandling(message, number).then((found) => {
             if(found.res){
                 console.log(found);
-                var topic = mqttClient.undockTopic + found.docId ;
-                mqttClient.client.publish(topic,found.lockId);
+                var topic = mqttClient.undockTopic + found.response.docId ;
+                mqttClient.client.publish(topic,found.response.lockId);
 
                 messageBody = "Submitted lock will be unlock soon";
                 const twiml = new MessagingResponse();
