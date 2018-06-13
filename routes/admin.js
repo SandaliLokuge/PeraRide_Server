@@ -75,7 +75,7 @@ module.exports = (app)=>{
         });
     });
 
-    app.post('/admin/currentusers',AdminAuthenticate,function(req,res){
+    app.post('/admin/currentusers',function(req,res){
 
         curentbikeusers.bikeusers().then((found) => {
             res.json(found);
