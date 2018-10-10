@@ -9,6 +9,7 @@ var removebike = require('../functions/removeBike');
 var curentbikeusers = require('../functions/currentBikeUsers');
 var removeUser = require('../functions/removeUser');
 var curentbikes = require('../functions/curentBikes');
+var fetchstations = require('../functions/fetchStations');
 
 
 module.exports = (app)=>{
@@ -99,6 +100,15 @@ module.exports = (app)=>{
             res.json(found);
         }).catch((err) => {
             res.json(err);
+        });
+    });
+
+    app.post('/admin/fetchstations',AdminAuthenticate,function(req,res){
+
+        fetchstations.fetchstations().then((found) => {
+            res.json(found);
+        }).catch((found)=>{
+            res.json(found);
         });
     });
 
