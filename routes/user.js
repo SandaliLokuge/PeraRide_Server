@@ -46,7 +46,8 @@ module.exports = (app,mqttClient)=>{
         unlockQR.unlockQR(body).then((found) => {
             if(found.res){
                 var topic = mqttClient.undockTopic + found.docId ;
-                mqttClient.client.publish(topic,found.lockId)
+                mqttClient.client.publish(topic,found.lockId);
+                console.log('message published to ' + topic);
             }
             res.json(found);
         }).catch((found)=>{

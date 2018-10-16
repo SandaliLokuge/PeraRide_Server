@@ -39,7 +39,7 @@ module.exports = (app,mqttClient)=>{
 
                 res.end(twiml.toString());
 
-                console.log('successfull found unlock');
+                console.log('successfull unlock');
             }else {
 
                 const twiml = new MessagingResponse();
@@ -65,6 +65,7 @@ module.exports = (app,mqttClient)=>{
 
             res.end(twiml.toString());
 
+            console.log('Error was occured: ' + errmsg);
         })
 
     });
