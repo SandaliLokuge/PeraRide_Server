@@ -23,6 +23,9 @@ if(config.util.getEnv('NODE_ENV') !== 'test') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+app.get('/',(req, res) => {
+  res.sendFile(__dirname + '/home/index.html')
+})
 app.use('/PeraRide/v1', router);
 //routing paths
 require('./routes/index')(router,mqttClient);
