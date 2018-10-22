@@ -2,10 +2,10 @@ const mqtt = require ('mqtt');
 const lockBike = require('../functions/lockBike');
 const isnewbike = require('../functions/isNewBike');
 
-var client  = mqtt.connect('mqtt://159.89.238.212',{
+var client  = mqtt.connect('mqtt://206.189.132.37',{
     port: 8883,
-    username: 'server',
-    password: 'perarideserver',
+    username: 'peraride',
+    password: 'peraride_dev',
     clientId: 'peraride_server',
     rejectUnauthorized: false
 });
