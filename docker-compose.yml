@@ -5,13 +5,13 @@ services:
     volumes:
       - ./:/app
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     links:
       - mongo
   mongo:
     image: mongo
     ports:
-      - "27017:27017"
+      - "127.0.0.1:27017:27017"
     volumes_from:
       - mongodata
   mongodata:
