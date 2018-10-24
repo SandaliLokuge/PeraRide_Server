@@ -3,7 +3,7 @@ const lockBike = require('../functions/lockBike');
 const isnewbike = require('../functions/isNewBike');
 
 var client  = mqtt.connect('mqtt://159.65.153.162',{
-    port: 8883,
+    port: 1883,
     username: 'dock1',
     password: 'peraridedock1',
     clientId: 'peraride_server',
