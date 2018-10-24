@@ -12,7 +12,9 @@ var client  = mqtt.connect('mqtt://159.65.153.162',{
 
 client.on('connect', function() { 
     console.log('connected to mqtt broker');
-    client.subscribe('PeraRide/redock/lock2');    
+    client.subscribe('PeraRide/redock/lock2');
+    client.subscribe('PeraRide/redock/lock3'); 
+    client.subscribe('PeraRide/redock/lock4');     
 });
 
 client.on('message', function(topic,payload) { // When connected
