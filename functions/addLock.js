@@ -35,7 +35,7 @@ var addLock = (body) => {
 
                 });
             }else {
-            reject({'response' : "lock already exits", 'res' : false});
+                reject({'response' : "lock already exits", 'res' : false});
             }
         })
 

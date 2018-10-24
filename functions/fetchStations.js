@@ -6,9 +6,13 @@ var fetchstations = () => {
             {},
             {_id:0, station_id:0, __v:0, locks:0}
         ).then((res) => {
-           resolve({'response' : res});
+            if(res){
+                resolve({'response' : res, 'res':true});
+            }else {
+                reject({'response' : "No stations found", 'res':false});
+            }           
        }).catch((err) => {
-           reject(err);
+           reject({'response' : err, 'res':false});
        })
     })
 
